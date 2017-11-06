@@ -1,0 +1,60 @@
+package ui.pages
+{//ui.pages.className
+	import contents.PageData;
+	import contents.interFace.DisplayPageInterface;
+	
+	import flash.events.Event;
+	
+	import mainClass.core.ManagerEventNameClass;
+	import mainClass.core.Manager;
+	import mainClass.webservice.service.serviceClass;
+	
+	import restDoaService.RestDoaEvent;
+	
+	import ui.dynamicLinks.VerticalDynamicLink;
+	
+	public class className extends Manager implements DisplayPageInterface
+	{
+		private var preloader:PreLoader,
+					dynamicLink:VerticalDynamicLink;
+		private var serviceName:serviceClass;			
+		public function className()
+		{
+			super();
+			dynamicLink = Obj.findThisClass(VerticalDynamicLink,this);
+			Manager.eventDispacher.addEventListener(ManagerEventNameClass.ERROR,error);
+			this.addEventListener(Event.REMOVED_FROM_STAGE,unload);
+		}
+		protected function unload(event:Event):void
+		{
+			Manager.eventDispacher.removeEventListener(ManagerEventNameClass.ERROR,error);
+		}
+		protected function error(event:ManagerEventNameClass):void
+		{
+			Hints.show(event.errorMessage);
+		}
+		public function setUp(pageData:PageData):void
+		{
+			cancelServic(serviceName);
+			serviceName = new serviceClass(true,true);
+			addServecCalled(serviceName);
+			serviceName.addEventListener(RestDoaEvent.CONNECTION_ERROR,connectionError);
+			serviceName.addEventListener(RestDoaEvent.SERVER_ERROR,serverError);
+			serviceName.addEventListener(RestDoaEvent.SERVER_RESULT,result);
+			serviceName.addEventListener(RestDoaEvent.SERVER_RESULT_UPDATE,result);
+			serviceName.load();
+		}
+		protected function result(event:Event):void
+		{
+			preloader.visible = false;
+			if(!chekError(serviceName.data,serviceName.id))
+			{
+				dynamicLink.setUp(serviceName.pageDataResult());	
+			}
+			else
+			{
+				trace('not server result');
+			}
+		}
+	}
+}
