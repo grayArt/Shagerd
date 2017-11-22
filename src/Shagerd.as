@@ -9,7 +9,7 @@
 		public function Shagerd() {
 			
 			Setup.load('D:/Kheshti/Project/LMS-app');
-			Setup.serviceFormat1('GetCourse2');
+			Setup.serviceFormat('servcieName',3);
 		}
 		
 	}
