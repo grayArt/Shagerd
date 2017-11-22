@@ -1,0 +1,30 @@
+package ui.linkItem
+{//ui.linkItem.LinkItemClaseCrateName
+	import contents.LinkData;
+	import contents.displayPages.LinkItem;
+	import appManager.displayContentElemets.TitleText;
+	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
+	import diagrams.calender.MyShamsi;
+	//importData
+	public class LinkItemClaseCrateName extends LinkItem
+	{
+		private var data:classeModelName;
+		//addVariable
+		public function LinkItemClaseCrateName(mouseChildAccept:Boolean=false, searchForElements:Boolean=true)
+		{
+			super(mouseChildAccept, searchForElements);
+//addObj
+		}
+		override public function setUp(linkData:LinkData):void
+		{
+			myLinkData = linkData;
+			data = linkData.dynamicData as classeModelName;
+//addData			
+		}
+		override public function imSelected(event:MouseEvent=null):void
+		{
+			
+		}
+	}
+}
