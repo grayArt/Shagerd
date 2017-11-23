@@ -21,6 +21,7 @@ package ui.pages
 		public function className()
 		{
 			super();
+			preloader = Obj.findThisClass(PreLoader,this);
 			dynamicLink = Obj.findThisClass(VerticalDynamicLink,this);
 			Manager.eventDispacher.addEventListener(ManagerEventNameClass.ERROR,error);
 			this.addEventListener(Event.REMOVED_FROM_STAGE,unload);

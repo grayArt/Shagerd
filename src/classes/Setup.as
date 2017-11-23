@@ -70,7 +70,7 @@ package classes
 			var serviceWriteBytes:ByteArray =new ByteArray();;
 			serviceWriteBytes.position = 0;
 			serviceWriteBytes.writeUTFBytes(serviceUiString);
-			var serviceUiWriteBytesPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/ui/pages/'+claseName+'2.as'); 
+			var serviceUiWriteBytesPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/ui/pages/'+claseName+'.as'); 
 			FileManager.seveFile(serviceUiWriteBytesPath,serviceWriteBytes);
 			//trace('serviseUiString :',serviceUiString);
 			if(Foramt_p == 1)
@@ -101,7 +101,7 @@ package classes
 			var linkItemWriteBytes:ByteArray =new ByteArray();;
 			linkItemWriteBytes.position = 0;
 			linkItemWriteBytes.writeUTFBytes(linkItemUiString);
-			var serviceUiWriteBytesPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/ui/linkItem/'+ServiceName_p+'LinkItem'+'2.as'); 
+			var serviceUiWriteBytesPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/ui/linkItem/'+ServiceName_p+'LinkItem'+'.as'); 
 			FileManager.seveFile(serviceUiWriteBytesPath,linkItemWriteBytes);
 
 			//trace('linkItemUiString :',linkItemUiString);
@@ -160,7 +160,7 @@ package classes
 			return claseUiString_p;
 			
 		}
-		private static function splitVar(codStr_p:String):void
+		private static function splitVar(codStr_p:String,cont_p:int=0):void
 		{
 			var startIndex:int = codStr_p.indexOf('var '); 
 			var endIndex:int;
@@ -175,12 +175,20 @@ package classes
 				createVar += "\t\t\t"+getVar+" = Obj.get('"+getVar+"_mc'"+",this);\n"
 				if(type !='Date' && type !='Boolean')
 				{
-					addData += "\n\t\t\tif("+getVar+"!=null)\n\t\t\t{\n\t\t\t\t"+getVar+".setUp(data."+getVar+");\n\t\t\t}";
+					
+					if(type =='Number')
+					{
+						addData += "\n\t\t\tif("+getVar+"!=null)\n\t\t\t{\n\t\t\t\t"+getVar+".setUp(data."+getVar+".toString());\n\t\t\t}";
+					}
+					else
+					{
+						addData += "\n\t\t\tif("+getVar+"!=null)\n\t\t\t{\n\t\t\t\t"+getVar+".setUp(data."+getVar+");\n\t\t\t}";
+					}
 				}
 				if(type =='Date')
 				{
-					var myshamsiString:String = 'var _shamsiDate:MyShamsi = MyShamsi.miladiToShamsi(data.'+getVar+');';
-					addData += "\n\t\t\tif("+getVar+"!=null)\n\t\t\t{\n\t\t\t\t"+myshamsiString+"\n\t\t\t\t"+getVar+".setUp(_shamsiDate.showStringFormat(false,false),false);\n\t\t\t}";
+					var myshamsiString:String = 'var _shamsiDate_'+cont_p+':MyShamsi = MyShamsi.miladiToShamsi(data.'+getVar+');';
+					addData += "\n\t\t\tif("+getVar+"!=null)\n\t\t\t{\n\t\t\t\t"+myshamsiString+"\n\t\t\t\t"+getVar+".setUp(_shamsiDate_"+cont_p+".showStringFormat(false,false),false);\n\t\t\t}";
 				}
 				if(type =='Boolean')
 				{
@@ -188,7 +196,7 @@ package classes
 				}
 				if(codStr_p.length>0)
 				{
-					splitVar(codStr_p.substring(endIndex+1,codStr_p.length));
+					splitVar(codStr_p.substring(endIndex+1,codStr_p.length),cont_p+1);
 				}	
 			}
 		}

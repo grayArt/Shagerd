@@ -26,6 +26,7 @@ package ui.pages
 		public function className()
 		{
 			super();
+			preloader = Obj.findThisClass(PreLoader,this);
 //addObj
 			Manager.eventDispacher.addEventListener(ManagerEventNameClass.ERROR,error);
 			this.addEventListener(Event.REMOVED_FROM_STAGE,unload);
@@ -52,9 +53,9 @@ package ui.pages
 		protected function result(event:Event):void
 		{
 			preloader.visible = false;
-			if(!chekError(serviceName.data,serviceName.id))
+			if(!chekError(serviceName.data,serviceName.id) && serviceName.data.Result!=null)
 			{
-				data = serviceName.data.Result[0];
+				data = serviceName.data.Result;
 //addData				
 			}
 			else
