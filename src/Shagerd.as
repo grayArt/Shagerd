@@ -9,7 +9,7 @@
 		public function Shagerd() {
 			
 			Setup.load('D:/Kheshti/Project/LMS-app');
-			Setup.serviceFormat('GetPersonnelSessionByCourseId',1);
+			Setup.serviceFormat('GetActiveCourseMessage',1,'اعلان ها');
 		}
 		
 	}

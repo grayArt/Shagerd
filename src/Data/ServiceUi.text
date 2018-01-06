@@ -2,7 +2,7 @@ package ui.pages
 {//ui.pages.className
 	import contents.PageData;
 	import contents.interFace.DisplayPageInterface;
-	
+	import appManager.event.AppEventContent;
 	import flash.events.Event;
 	
 	import mainClass.core.ManagerEventNameClass;
@@ -55,6 +55,7 @@ package ui.pages
 			else
 			{
 				trace('not server result');
+				this.dispatchEvent(AppEventContent.lastPage());
 			}
 		}
 	}

@@ -14,6 +14,7 @@ package classes
 		private static var projectAddress:String;
 		private static var createVar:String='';
 		private static var addData:String='';
+		private static var dataXML:XML;
 		public function Setup(target:IEventDispatcher=null)
 		{
 			super(target);
@@ -22,7 +23,7 @@ package classes
 		{
 			//reade Manager for get name var
 			projectAddress = ProjectAddress_p;
-			var managerPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/mainClass/core/'+'Manager.as')
+			var managerPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/src/mainClass/core/'+'Manager.as');
 			var managerByte:ByteArray = FileManager.loadFile(managerPath);
 				managerByte.position = 0;
 			var managerString:String = managerByte.readUTFBytes(managerByte.length);
@@ -30,19 +31,43 @@ package classes
 			//get Manager events Name classs
 			ManagerEventNameClass = managerString.split(' ').join('');
 			ManagerEventNameClass = ManagerEventNameClass.split('dispatchEvent(new')[1];
-			ManagerEventNameClass = ManagerEventNameClass.split('(')[0];		
+			ManagerEventNameClass = ManagerEventNameClass.split('(')[0];
+			
+			//reade data xml
+			var dataXMLPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/lms/Data/data.xml');
+			var dataXMLByte:ByteArray = FileManager.loadFile(dataXMLPath);
+			dataXMLByte.position = 0;
+			dataXML = new XML(dataXMLByte.readUTFBytes(dataXMLByte.length));
+
+
 		}
 		
 		/**service page ui:
 		 * 1-one dynamic links
 		 * 2-linkItem
 		 * 3-show in man Class*/
-		public static function serviceFormat(ServiceName_p:String,Foramt_p:int):void
+		public static function serviceFormat(ServiceName_p:String,Foramt_p:int,title_p:String=null,dataXmlAddPage_p:Boolean=true):void
 		{
 			var serviceUiString:String;
 			var serviceNameLowerCase:String = ServiceName_p.toLowerCase();
 			var claseName:String = ServiceName_p+'Ui';
 			
+			if(title_p==null)
+			{
+				title_p = ServiceName_p;
+			}
+			
+			var dataString:String = dataXML.toString();
+			if(dataString.indexOf(serviceNameLowerCase+'Ui')==-1 && dataXmlAddPage_p)
+			{
+				dataXML.appendChild(new XML('<page id="'+serviceNameLowerCase+'Ui'+'"><type>ui.pages.'+claseName+'</type><title>'+title_p+'</title><image></image><content></content><links></links><links></links></page>'));
+				var dataXMLWriteBytes:ByteArray =new ByteArray();;
+				dataXMLWriteBytes.position = 0;
+				dataXMLWriteBytes.writeUTFBytes(dataXML.toString());
+				var dataXMLUiWriteBytesPath:File = File.applicationDirectory.resolvePath(projectAddress+'/project/lms/Data/data.xml');
+				FileManager.seveFile(dataXMLUiWriteBytesPath,dataXMLWriteBytes);
+			}
+
 			//load base service page ui
 			var fileTextName:String;
 			if(Foramt_p==1)
